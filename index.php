@@ -4,31 +4,68 @@
 */
 class Deck
 {
-	private $suits = array('Clubs', 'Diamonds', 'Hearts', 'Spades');
-	private $cards = array('Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King');
-	private $deck  = array();
+	private $suits     = array('c', 'd', 'h', 's');
+	private $cards     = array('A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K');
+	private $deck      = array();
+	public  $symbols   = array('c' => '&clubs;', 'd' => '&diams;', 'h' => '&hearts;', 's' => '&spades;');
+	public  $color     = array('h', 'd');
 
 	public function __construct()
 	{
-		$this->setDeck();
+		$shuffle = true;
+		$this->setDeck($shuffle);
 	}
 
-	private function setDeck()
+	private function setDeck($shuffle = false)
 	{
 		foreach ($this->suits as $suit) {
-			$this->deck[$suit] = $this->cards;
+			foreach ($this->cards as $card) {
+				$this->deck[] = array($suit => $card);
+			}
 		}
-	}
-
-	public function getDeck($shuffle = false)
-	{
 		if ($shuffle) {
-			// Thendo some algo here to shuffle the deck
+			$this->shuffleDeck();
 		}
 	}
 
-	public function shuffleDeck()
+	public function getDeck()
 	{
+		// var_dump(count($this->deck));
+		// var_dump($this->deck);
+		return $this->deck;
+	}
 
+	private function shuffleDeck()
+	{
+		$bits    = array();
+		$newDeck = array();
+		
+		shuffle($this->deck);
+		
+		for ($i = 0; $i < 52; $i++) { 
+			if ($i % 2 == 0) {
+				$bits['even'][] = $this->deck[$i];
+			} else {
+				$bits['odd'][] = $this->deck[$i];
+			}
+		}
+		shuffle($bits['even']);
+		shuffle($bits['odd']);
+
+		$newDeck    = array_merge($bits['odd'], $bits['even']);
+		$this->deck = $newDeck;
+		
+		shuffle($this->deck);
+		
+	}
+}
+
+$cards = new Deck();
+$style = '';
+
+foreach ($cards->getDeck(true) as $card) {
+	foreach ($card as $suit => $value) {
+		$style = in_array($suit, $cards->color) ? ' style="color:red;"' : '';
+		echo '<strong' . $style . '>' . $cards->symbols[$suit] . $value . ' </strong>';
 	}
 }

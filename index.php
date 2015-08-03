@@ -23,7 +23,7 @@ class Deck
 	public function getDeck($shuffle = false)
 	{
 		if ($shuffle) {
-			
+			// Thendo some algo here to shuffle the deck
 		}
 	}
 

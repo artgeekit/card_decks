@@ -2,7 +2,7 @@
 /**
 * AF: comment edited from git bash
 */
-class Deck
+class CardDeck
 {
 	private $suits     = array('c', 'd', 'h', 's');
 	private $cards     = array('A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K');
@@ -60,7 +60,7 @@ class Deck
 	}
 }
 
-$cards = new Deck();
+$cards = new CardDeck();
 $style = '';
 
 foreach ($cards->getDeck(true) as $card) {

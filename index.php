@@ -1,6 +1,6 @@
 <?php
 /**
-* AF: comment edited from git bash
+* AF: cloned to home pc
 */
 class CardDeck
 {

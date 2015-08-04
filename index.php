@@ -1,6 +1,8 @@
 <?php
 /**
-* AF: cloned to home pc
+* @author Arthur Frank <frank.artur0303@gmail.com>
+* @date 04/08/2015
+* This is class to generate and work with a deck of cards
 */
 class CardDeck
 {
@@ -30,8 +32,6 @@ class CardDeck
 
 	public function getDeck()
 	{
-		// var_dump(count($this->deck));
-		// var_dump($this->deck);
 		return $this->deck;
 	}
 

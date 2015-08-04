@@ -107,8 +107,8 @@ class PokerGame extends CardDeck
 	}
 }
 // unset($_SESSION['game']);
-var_dump($_SESSION['game']['players'][0]);
-var_dump($_SESSION['game']['deck']);
+// var_dump($_SESSION['game']['players'][0]);
+// var_dump($_SESSION['game']['deck']);
 
 $pokerGame = new PokerGame();
 $cards     = new CardDeck();
@@ -122,6 +122,17 @@ foreach ($cards->getDeck(true) as $card) {
 		$style = in_array($suit, $cards->color) ? ' style="color:red;"' : '';
 		echo '<strong' . $style . '>' . $cards->symbols[$suit] . $value . ' </strong>';
 	}
+}
+foreach ($_SESSION['game']['players'] as $id => $playData) {
+	$c = '';
+	
+	foreach ($playData['cards'] as $id => $card) {
+		foreach ($card as $suit => $value) {
+			$style = in_array($suit, $cards->color) ? ' style="color:red;"' : '';
+			$c .= '<strong' . $style . '>' . $cards->symbols[$suit] . $value . ' </strong>';
+		}
+	}
+	echo "<p>Player Name: " . $playData['name'] . ", Cards: " . $c . "</p>";
 }
 ?>
 

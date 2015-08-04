@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**
 * @author Arthur Frank <frank.artur0303@gmail.com>
 * @date 04/08/2015
@@ -56,11 +57,64 @@ class CardDeck
 		$this->deck = $newDeck;
 		
 		shuffle($this->deck);
-		
 	}
 }
 
-$cards = new CardDeck();
+class PokerGame extends CardDeck
+{
+	public $session;
+	public $currentDeck = array();
+	private $players = array(
+		array('name' => 'Lunj', 'cards' => array(), 'chance' => 0),
+		array('name' => 'Petr', 'cards' => array(), 'chance' => 0),
+		array('name' => 'Arthur', 'cards' => array(), 'chance' => 0),
+		array('name' => 'Alex', 'cards' => array(), 'chance' => 0),
+		array('name' => 'Eug', 'cards' => array(), 'chance' => 0),
+		array('name' => 'Ped', 'cards' => array(), 'chance' => 0),
+		);
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		if (empty($_SESSION['game'])) {
+			$this->updateSession();
+		}
+	}
+
+	public function updateSession()
+	{
+		$this->currentDeck = $this->getDeck();
+
+		$_SESSION['game']['players'] = $this->players;
+		$_SESSION['game']['deck']    = $this->currentDeck;
+		$_SESSION['game']['status']  = 'pending';
+	}
+
+	public function startGame()
+	{
+		if (isset($_SESSION['game']['status']) AND $_SESSION['game']['status'] == 'pending') {
+			$_SESSION['game']['status'] = 'in-progress';
+		}
+		$numberOfCard = 2;
+		var_dump($this->players);
+		var_dump($this->currentDeck);
+		for ($i = 0; $i < count($this->players) * $numberOfCard; $i++) { 
+			var_dump($i);
+			// $this->players[$i]['cards'][] = $this->currentDeck[$i];
+			// unset($this->currentDeck[$i]);
+		}
+		$this->updateSession();
+	}
+}
+// unset($_SESSION['game']);
+// var_dump($_SESSION['game']['deck']);
+
+$pokerGame = new PokerGame();
+$cards     = new CardDeck();
+
+$pokerGame->startGame();
+
 $style = '';
 
 foreach ($cards->getDeck(true) as $card) {
@@ -69,3 +123,35 @@ foreach ($cards->getDeck(true) as $card) {
 		echo '<strong' . $style . '>' . $cards->symbols[$suit] . $value . ' </strong>';
 	}
 }
+?>
+
+<style type="text/css">
+	.play1, .play2, .play3, .play4, .play5, .play6 {margin: 10px; width: 100px; height: 100px; display: inline-block; border: 1px solid #000;}
+	.table {width: 500px; height: 250px; border: 1px solid #000; display: inline-block;}
+	.wrap {width: 750px;}
+	.table, .play4 {float: right;}
+	.play3 {float: left;}
+	.clear {clear: both;}
+	.up-line, .bottom-line {text-align: center; overflow: hidden;}
+</style>
+
+<div class="wrap">
+	<div class="up-line">
+		<div class="play1">Player 1</div>
+		<div class="play2">Player 2</div>
+	</div>
+	<div class="left-side">
+		<div class="play3">Player 3</div>
+	</div>
+	<div class="right-side">
+		<div class="play4">Player 4</div>
+	</div>
+	<div class="table">TABLE</div>
+	<div class="clear"></div>
+	<div class="bottom-line">
+		<div class="play5">Player 5</div>
+		<div class="play6">Player 6</div>
+	</div>
+</div>
+
+

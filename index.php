@@ -78,16 +78,14 @@ class PokerGame extends CardDeck
 		parent::__construct();
 
 		if (empty($_SESSION['game'])) {
-			$this->updateSession();
+			$this->setSession();
 		}
 	}
 
-	public function updateSession()
+	public function setSession()
 	{
-		$this->currentDeck = $this->getDeck();
-
 		$_SESSION['game']['players'] = $this->players;
-		$_SESSION['game']['deck']    = $this->currentDeck;
+		$_SESSION['game']['deck']    = $this->getDeck();
 		$_SESSION['game']['status']  = 'pending';
 	}
 
@@ -95,20 +93,22 @@ class PokerGame extends CardDeck
 	{
 		if (isset($_SESSION['game']['status']) AND $_SESSION['game']['status'] == 'pending') {
 			$_SESSION['game']['status'] = 'in-progress';
+			$pn = count($_SESSION['game']['players']); // Number of players
+
+			foreach ($_SESSION['game']['players'] as $id => $playData) { 
+				$_SESSION['game']['players'][$id]['cards'][] = $_SESSION['game']['deck'][$id];
+				$_SESSION['game']['players'][$id]['cards'][] = $_SESSION['game']['deck'][$id + $pn];
+				
+				unset($_SESSION['game']['deck'][$id]);
+				unset($_SESSION['game']['deck'][$id + $pn]);
+			}
 		}
-		$numberOfCard = 2;
-		var_dump($this->players);
-		var_dump($this->currentDeck);
-		for ($i = 0; $i < count($this->players) * $numberOfCard; $i++) { 
-			var_dump($i);
-			// $this->players[$i]['cards'][] = $this->currentDeck[$i];
-			// unset($this->currentDeck[$i]);
-		}
-		$this->updateSession();
+		// $this->updateSession();
 	}
 }
 // unset($_SESSION['game']);
-// var_dump($_SESSION['game']['deck']);
+var_dump($_SESSION['game']['players'][0]);
+var_dump($_SESSION['game']['deck']);
 
 $pokerGame = new PokerGame();
 $cards     = new CardDeck();
